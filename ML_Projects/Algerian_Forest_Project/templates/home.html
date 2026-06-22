@@ -1,42 +1,174 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Algerian Forest Fires FWI Predictor — enter weather parameters to instantly calculate the Fire Weather Index using a trained Ridge Regression model." />
+  <title>FWI Predictor | Algerian Forest Fire Risk</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
 <body>
+  <div class="page-wrapper">
 
-<div class="login">
-    <h1>FWI Prediction</h1>
+    <!-- Header -->
+    <header class="site-header">
+      <a href="/" class="logo">
+        <span class="logo-icon">🔥</span>
+        <span class="logo-text">FireWatch AI</span>
+      </a>
+      <span class="nav-badge">Ridge Regression Model</span>
+    </header>
 
-    <!-- Main Input For Receiving Query to our ML -->
+    <!-- Main Prediction Card -->
+    <main>
+      <div class="card">
 
-    <form action="{{ url_for('predict_datapoint') }}" method="post">
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="tag">🛰️ Real-time Prediction</div>
+          <h1>Fire Weather Index <span>Predictor</span></h1>
+          <p>Enter meteorological observations below to estimate the Fire Weather Index (FWI) for Algerian forest fire conditions.</p>
+        </div>
 
-        <input type="text" name="Temperature" placeholder="Temperature" required="required" /><br>
+        <!-- Form -->
+        <form id="predict-form" action="{{ url_for('predict_datapoint') }}" method="post">
 
-        <input type="text" name="RH" placeholder="RH" required="required" /><br>
+          <!-- Section: Weather Parameters -->
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <span class="section-divider-label">🌡️ Weather Parameters</span>
+            <div class="section-divider-line"></div>
+          </div>
 
-        <input type="text" name="Ws" placeholder="Ws" required="required" /><br>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="Temperature">Temperature (°C)</label>
+              <input class="form-control" id="Temperature" type="number" name="Temperature" placeholder="e.g. 30" step="any" required />
+            </div>
 
-        <input type="text" name="Rain" placeholder="Rain" required="required" /><br>
+            <div class="form-group">
+              <label class="form-label" for="RH">Relative Humidity (%)</label>
+              <input class="form-control" id="RH" type="number" name="RH" placeholder="e.g. 50" step="any" required />
+            </div>
 
-        <input type="text" name="FFMC" placeholder="FFMC" required="required" /><br>
+            <div class="form-group">
+              <label class="form-label" for="Ws">Wind Speed (km/h)</label>
+              <input class="form-control" id="Ws" type="number" name="Ws" placeholder="e.g. 15" step="any" required />
+            </div>
 
-        <input type="text" name="DMC" placeholder="DMC" required="required" /><br>
+            <div class="form-group">
+              <label class="form-label" for="Rain">Rainfall (mm)</label>
+              <input class="form-control" id="Rain" type="number" name="Rain" placeholder="e.g. 0" step="any" required />
+            </div>
+          </div>
 
-        <input type="text" name="ISI" placeholder="ISI" required="required" /><br>
+          <!-- Section: Fire Weather Indices -->
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <span class="section-divider-label">📊 Fire Weather Indices</span>
+            <div class="section-divider-line"></div>
+          </div>
 
-        <input type="text" name="Classes" placeholder="Classes" required="required" /><br>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="FFMC">
+                FFMC
+                <span class="tooltip-trigger" data-tip="Fine Fuel Moisture Code — measures moisture content of litter and fine fuels. Range: 28.6 to 92.5. Higher = drier = more flammable.">?</span>
+              </label>
+              <input class="form-control" id="FFMC" type="number" name="FFMC" placeholder="e.g. 85" step="any" required />
+            </div>
 
-        <input type="text" name="Region" placeholder="Region" required="required" /><br>
+            <div class="form-group">
+              <label class="form-label" for="DMC">
+                DMC
+                <span class="tooltip-trigger" data-tip="Duff Moisture Code — measures moisture of loosely compacted organic layers. Range: 1.1 to 65.9. Higher = drier conditions.">?</span>
+              </label>
+              <input class="form-control" id="DMC" type="number" name="DMC" placeholder="e.g. 12" step="any" required />
+            </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-large">
-            Predict
-        </button>
+            <div class="form-group">
+              <label class="form-label" for="ISI">
+                ISI
+                <span class="tooltip-trigger" data-tip="Initial Spread Index — expected rate of fire spread immediately after ignition. Range: 0 to 22.0. Higher = faster spread.">?</span>
+              </label>
+              <input class="form-control" id="ISI" type="number" name="ISI" placeholder="e.g. 5" step="any" required />
+            </div>
+          </div>
 
-    </form>
+          <!-- Section: Classification -->
+          <div class="section-divider">
+            <div class="section-divider-line"></div>
+            <span class="section-divider-label">🗺️ Classification</span>
+            <div class="section-divider-line"></div>
+          </div>
 
-    <h2>
-        THE FWI prediction is {{ results }}
-    </h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="Classes">
+                Fire Risk Class
+                <span class="tooltip-trigger" data-tip="Whether fire was observed on this day. 'Fire' = 1.0, 'Not Fire' = 0.0.">?</span>
+              </label>
+              <div class="select-wrapper">
+                <select class="form-control" id="Classes" name="Classes" required>
+                  <option value="" disabled selected>Select fire class...</option>
+                  <option value="1">🔥 Fire</option>
+                  <option value="0">🟢 Not Fire</option>
+                </select>
+              </div>
+            </div>
 
-</div>
+            <div class="form-group">
+              <label class="form-label" for="Region">
+                Region
+                <span class="tooltip-trigger" data-tip="Geographic region where data was recorded. Bejaia = 0.0, Sidi-Bel Abbes = 1.0.">?</span>
+              </label>
+              <div class="select-wrapper">
+                <select class="form-control" id="Region" name="Region" required>
+                  <option value="" disabled selected>Select region...</option>
+                  <option value="0">📍 Bejaia (North-East)</option>
+                  <option value="1">📍 Sidi-Bel Abbes (North-West)</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
+          <!-- Submit -->
+          <button type="submit" id="predict-btn" class="btn-predict">
+            <span class="btn-icon">⚡</span>
+            Calculate Fire Weather Index
+          </button>
+        </form>
+
+        <!-- Result Panel -->
+        {% if results != None %}
+        <div class="result-panel" id="result-panel">
+          <div class="result-icon">🔥</div>
+          <div class="result-content">
+            <div class="result-label">Predicted FWI Score</div>
+            <div class="result-value">{{ results | round(4) }}</div>
+            <div class="result-desc">
+              {% set fwi = results | float %}
+              {% if fwi < 5 %}
+                🟢 Low Fire Danger — Conditions are relatively safe.
+              {% elif fwi < 12 %}
+                🟡 Moderate Fire Danger — Monitor conditions closely.
+              {% elif fwi < 20 %}
+                🟠 High Fire Danger — Take caution; fire risk is elevated.
+              {% else %}
+                🔴 Very High / Extreme Fire Danger — Critical conditions. Immediate attention required.
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div><!-- /.card -->
+    </main>
+
+    <footer class="site-footer">
+      FireWatch AI &mdash; Algerian Forest Fire Prediction System &bull; Ridge Regression Model &bull; Scikit-Learn
+    </footer>
+
+  </div><!-- /.page-wrapper -->
 </body>
 </html>

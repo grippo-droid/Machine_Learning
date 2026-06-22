@@ -1,1 +1,64 @@
-<h1>Welcome to the home page</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FireWatch AI — Algerian Forest Fire Weather Index Prediction System powered by Machine Learning." />
+  <title>FireWatch AI | Algerian Forest Fire Risk</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <header class="site-header">
+      <a href="/" class="logo">
+        <span class="logo-icon">🔥</span>
+        <span class="logo-text">FireWatch AI</span>
+      </a>
+      <span class="nav-badge">ML-Powered Prediction</span>
+    </header>
+
+    <!-- Landing Card -->
+    <main>
+      <div class="card landing-card">
+
+        <div class="card-header">
+          <div class="tag">🌍 Algeria Forest Fire Dataset</div>
+          <h1>Predict Forest Fire Risk<br /><span>with AI in seconds</span></h1>
+          <p>An end-to-end Machine Learning system trained on real Algerian fire weather data to predict the Fire Weather Index (FWI) — a key indicator of fire danger intensity.</p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-emoji">📊</div>
+            <div class="stat-val">244</div>
+            <div class="stat-lbl">Training Data Records</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-emoji">📍</div>
+            <div class="stat-val">2</div>
+            <div class="stat-lbl">Algerian Regions Covered</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-emoji">🧠</div>
+            <div class="stat-val">Ridge</div>
+            <div class="stat-lbl">Regression Algorithm</div>
+          </div>
+        </div>
+
+        <a href="/predictdata" class="btn-launch">
+          <span>⚡</span>
+          Launch FWI Predictor
+        </a>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      FireWatch AI &mdash; Algerian Forest Fire Prediction System &bull; Data: June–September 2012
+    </footer>
+
+  </div>
+</body>
+</html>
