@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Score Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1e;
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(10, 15, 30, 0.95);
+            border-bottom: 1px solid #1e2d45;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f8fafc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand .brand-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f59e0b;
+            display: inline-block;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #f8fafc;
+            background: #1e2d45;
+        }
+
+        .nav-link.active {
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* Hero */
+        .hero-wrapper {
+            min-height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .hero {
+            max-width: 680px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: #f59e0b;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.75;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: #f59e0b;
+            color: #0a0f1e;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            border-radius: 10px;
+            text-decoration: none;
+            letter-spacing: 0.3px;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(245, 158, 11, 0.25);
+        }
+
+        .cta-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Feature cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 56px;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: #111827;
+            border: 1px solid #1e2d45;
+            border-radius: 14px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: #f59e0b;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.77rem;
+            color: #475569;
+            line-height: 1.55;
+        }
+
+        /* Stats */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+            padding-top: 36px;
+            border-top: 1px solid #1e2d45;
+            flex-wrap: wrap;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f59e0b;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.73rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 580px) {
+            .navbar { padding: 0 20px; }
+            .hero h1 { font-size: 2rem; }
+            .features { grid-template-columns: 1fr; }
+            .stats-row { gap: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <span class="brand-dot"></span>
+        ScorePredict
+    </a>
+    <div class="navbar-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/predictdata" class="nav-link">Predict</a>
+    </div>
+</nav>
+
+<div class="hero-wrapper">
+    <div class="hero">
+        <div class="hero-badge">Machine Learning Project</div>
+
+        <h1>
+            Student Math Score
+            <span>Prediction System</span>
+        </h1>
+
+        <p>
+            Enter a student's academic and demographic profile to get an instant prediction
+            of their math score — powered by a Ridge Regression model trained on real student data.
+        </p>
+
+        <a href="/predictdata" class="cta-btn">Get a Prediction</a>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <h3>Demographic Inputs</h3>
+                <p>Gender, race/ethnicity, and parental education level as predictive features.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </div>
+                <h3>Socioeconomic Factors</h3>
+                <p>Lunch program type and test prep course completion are key model inputs.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </div>
+                <h3>ML-Powered Score</h3>
+                <p>Ridge Regression model with StandardScaler produces an accurate score estimate.</p>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-value">1,000</div>
+                <div class="stat-label">Training Records</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">11</div>
+                <div class="stat-label">Input Features</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">Ridge</div>
+                <div class="stat-label">Model Type</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
