@@ -43,3 +43,8 @@ venv.bak/
 
 # Local logs
 *.log
+
+# Generated plot images
+*.png
+*.jpg
+*.jpeg

@@ -1,8 +1,12 @@
-# Student Marks Prediction System
+# Student Math Score Prediction System
 
-A machine learning-powered web application that predicts a student's math score based on academic, demographic, and socioeconomic indicators.
+A complete end-to-end machine learning project that predicts a student's math score based on academic, demographic, and socioeconomic factors — served through a Flask web app with a clean dark-themed UI.
 
-The project covers a complete ML workflow — from exploratory data analysis and model training in a Jupyter Notebook, to serving predictions through a Flask web app with a dark-themed UI.
+---
+
+## Live Demo
+
+> Run locally using the steps below. A live deployment link will be added here once hosted.
 
 ---
 
@@ -11,16 +15,15 @@ The project covers a complete ML workflow — from exploratory data analysis and
 ```
 Student Performance projec/
 ├── models/
-│   ├── ridge.pkl               # Trained Ridge Regression model
-│   └── scaler.pkl              # Fitted StandardScaler
+│   ├── ridge.pkl                    # Trained Ridge Regression model
+│   └── scaler.pkl                   # Fitted StandardScaler
 ├── notebooks/
-│   ├── StudentsPerformance.csv # Raw student dataset (1,000 records)
-│   └── Untitled9.ipynb         # Data preprocessing & model training
+│   ├── StudentsPerformance.csv      # Raw dataset (1,000 records)
+│   └── Student_Performance.ipynb   # EDA, preprocessing, training & visualizations
 ├── templates/
-│   ├── index.html              # Landing page
-│   └── home.html               # Prediction form & result display
-├── application.py              # Flask application entry point
-├── oldapplication.py           # Previous version (kept for reference)
+│   ├── index.html                   # Landing page
+│   └── home.html                    # Prediction form & result display
+├── application.py                   # Flask app entry point
 └── README.md
 ```
 
@@ -30,9 +33,80 @@ Student Performance projec/
 
 | Layer | Tools |
 |---|---|
-| Machine Learning | Scikit-Learn (Ridge Regression, StandardScaler) |
-| Data | Pandas, NumPy, Jupyter Notebook |
-| Web | Flask, Jinja2, HTML5/CSS3 |
+| Language | Python 3.11 |
+| Machine Learning | scikit-learn (Ridge Regression, StandardScaler) |
+| Data & EDA | Pandas, NumPy, Matplotlib, Seaborn |
+| Notebook | Jupyter Notebook |
+| Web Framework | Flask, Jinja2 |
+| Frontend | HTML5, CSS3 (custom dark theme) |
+
+---
+
+## Dataset
+
+- **Source:** Students Performance in Exams (Kaggle)
+- **Records:** 1,000 students
+- **Target:** Math score (0–100)
+- **Features:**
+
+| Feature | Type | Values |
+|---|---|---|
+| Gender | Categorical | Male / Female |
+| Race / Ethnicity | Categorical | Group A, B, C, D, E |
+| Parental Level of Education | Ordinal | Some High School → Master's Degree |
+| Lunch Program | Categorical | Standard / Free or Reduced |
+| Test Preparation Course | Categorical | None / Completed |
+| Reading Score | Numeric | 0–100 |
+| Writing Score | Numeric | 0–100 |
+
+---
+
+## ML Pipeline
+
+### 1. Preprocessing
+| Feature | Encoding |
+|---|---|
+| Gender | Binary (`0` = Male, `1` = Female) |
+| Race / Ethnicity | One-Hot Encoding → 5 columns (Group A–E) |
+| Parental Education | Ordinal (`0` = Some High School → `5` = Master's Degree) |
+| Lunch | Binary (`0` = Standard, `1` = Free/Reduced) |
+| Test Prep | Binary (`0` = None, `1` = Completed) |
+| Reading & Writing Score | Continuous — passed through as-is |
+
+All 11 features are normalized using `StandardScaler` before model input.
+
+### 2. Models Compared
+
+| Model | R² Score | MAE | MSE |
+|---|---|---|---|
+| Linear Regression | 0.8793 | 4.25 | 29.37 |
+| **Ridge Regression** | **0.8796** | **4.24** | **29.29** |
+| Lasso Regression | 0.8498 | 4.71 | 36.55 |
+
+**Ridge Regression** was selected — highest R² and lowest error across all metrics.
+
+Train/test split: **80/20**, `random_state=42`
+
+---
+
+## Visualizations
+
+The notebook includes 11 charts for full EDA and model evaluation:
+
+**Exploratory Data Analysis**
+- Score distributions (Math, Reading, Writing)
+- Math score by gender — violin + box plot
+- Math score by race/ethnicity — box plot + average bar chart
+- Math score by parental education level
+- Socioeconomic factors (lunch type & test prep) vs math score
+- Feature correlation heatmap
+- Pairplot of all three scores by gender
+
+**Model Evaluation**
+- Model comparison bar chart (R², MAE, MSE)
+- Actual vs Predicted scatter plots — all 3 models
+- Ridge residuals vs predicted + residual distribution
+- Ridge feature coefficients (importance)
 
 ---
 
@@ -40,8 +114,7 @@ Student Performance projec/
 
 ### Prerequisites
 
-Make sure you have **Python 3.11** installed from [python.org](https://www.python.org/downloads/).
-You can verify with:
+Python 3.11 from [python.org](https://www.python.org/downloads/)
 
 ```bash
 python --version
@@ -49,16 +122,13 @@ python --version
 
 ### 1. Install Dependencies
 
-Open a terminal in the project folder and run:
-
 ```bash
-pip install Flask scikit-learn pandas numpy
+pip install flask scikit-learn pandas numpy matplotlib seaborn
 ```
 
-> **Note for Windows users with multiple Python installations:**
-> If `python` points to the wrong interpreter (e.g., an MSYS2/MinGW Python), use the full path or the `py` launcher:
+> **Windows users with multiple Python installations:** use the `py` launcher to target the right version:
 > ```bash
-> py -3.11 -m pip install Flask scikit-learn pandas numpy
+> py -3.11 -m pip install flask scikit-learn pandas numpy matplotlib seaborn
 > ```
 
 ### 2. Start the Flask Server
@@ -67,14 +137,7 @@ pip install Flask scikit-learn pandas numpy
 python application.py
 ```
 
-Or with `py` launcher:
-
-```bash
-py -3.11 application.py
-```
-
-You should see output like:
-
+You should see:
 ```
 * Running on http://127.0.0.1:5000
 * Running on http://0.0.0.0:5000
@@ -84,41 +147,29 @@ You should see output like:
 
 | Page | URL |
 |---|---|
-| Landing page | http://127.0.0.1:5000/ |
-| Prediction form | http://127.0.0.1:5000/predictdata |
+| Home | http://127.0.0.1:5000/ |
+| Predict | http://127.0.0.1:5000/predictdata |
 
-To stop the server, press `Ctrl + C` in the terminal.
+Press `Ctrl + C` to stop the server.
 
 ---
 
-## Common Issues
+## Troubleshooting
 
 **`ModuleNotFoundError: No module named 'flask'`**
-The packages are not installed for the Python version being used. Run `pip install Flask scikit-learn pandas numpy` using the same Python that will run the app. If you have multiple Pythons, prefer `py -3.11 -m pip install ...`.
+The packages aren't installed for the Python version running the app. Use `py -3.11 -m pip install flask scikit-learn pandas numpy` to target the correct interpreter.
 
-**SSL errors during pip install (e.g. `CERTIFICATE_VERIFY_FAILED`)**
-This happens with MinGW/MSYS2 Python builds. Use the official Windows Python from [python.org](https://www.python.org/downloads/) instead.
+**SSL errors during pip install (`CERTIFICATE_VERIFY_FAILED`)**
+Caused by MinGW/MSYS2 Python builds. Switch to the official Windows Python from [python.org](https://www.python.org/downloads/).
 
 **Port 5000 already in use**
-Another process is occupying the port. Either stop that process or change the port in `application.py`:
+Change the port in `application.py`:
 ```python
 app.run(host="0.0.0.0", port=5001)
 ```
 
 ---
 
-## Model & Feature Details
+## Author
 
-The Ridge Regression model expects 11 features after preprocessing:
-
-| # | Feature | Encoding |
-|---|---|---|
-| 1 | Gender | `0` = Male, `1` = Female |
-| 2 | Parental education | `0` (Some High School) → `5` (Master's Degree) |
-| 3 | Lunch type | `0` = Standard, `1` = Free/Reduced |
-| 4 | Test prep course | `0` = None, `1` = Completed |
-| 5 | Reading score | Continuous (0–100) |
-| 6 | Writing score | Continuous (0–100) |
-| 7–11 | Race/Ethnicity | One-hot encoded: Group A, B, C, D, E |
-
-All features are normalized using `StandardScaler` before being passed to the model.
+**Parth Mahale**
