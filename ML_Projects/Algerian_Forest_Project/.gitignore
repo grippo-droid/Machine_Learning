@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.pkl.bak
+.DS_Store
+notebooks/.ipynb_checkpoints/
+notebooks/Algerian_forest_fires_cleaned_dataset.csv
