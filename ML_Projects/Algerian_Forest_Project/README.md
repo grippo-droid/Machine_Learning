@@ -1,5 +1,7 @@
 # Algerian Forest Fires - Fire Weather Index (FWI) Prediction App
 
+> **Note:** Backend is hosted on Render's free tier, which spins down after periods of inactivity. The first request may take 30-60 seconds to load while the server wakes up. Subsequent requests will be fast.
+
 An end-to-end Machine Learning web application built using Python, Flask, and Scikit-Learn to predict the **Fire Weather Index (FWI)**. The FWI is a core component of the Canadian Forest Fire Weather Index System, which evaluates fire danger based on meteorological observations.
 
 This project utilizes historical forest fire data from two regions in Algeria: **Bejaia** (North-East) and **Sidi-Bel Abbes** (North-West).
